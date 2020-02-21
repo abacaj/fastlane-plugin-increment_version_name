@@ -28,12 +28,14 @@ module Fastlane
             file.each_line do |line|
               if line.include? constant_name and foundVersionName=="false"
                 versionComponents = line.strip.split(' ')
-                current_version = versionComponents[versionComponents.length-1].tr("\"","")
+                current_version = versionComponents[versionComponents.length-1].tr("\"'","")
+                
                 if params[:version_name]
                   UI.verbose("Your current version (#{current_version}) does not respect the format A.B.C") unless current_version =~ /\d.\d.\d/
                 else
                   UI.user_error!("Your current version (#{current_version}) does not respect the format A.B.C") unless current_version =~ /\d+.\d+.\d+/
                   version_array = current_version.split(".").map(&:to_i)
+
                   case params[:bump_type]
                   when "patch"
                     version_array[2] = version_array[2] + 1
@@ -49,7 +51,8 @@ module Fastlane
                     new_version_name = version_array.join(".")
                   end
                 end
-                line.replace line.sub(current_version, new_version_name.to_s)
+
+                line.replace line.sub(current_version, "#{new_version_name}")
                 foundVersionName = "true"
                 temp_file.puts line
               else
