@@ -52,7 +52,7 @@ module Fastlane
                   end
                 end
 
-                line.replace line.sub(current_version, "''#{new_version_name}''")
+                line.replace line.sub(current_version, "'#{new_version_name}'")
                 foundVersionName = "true"
                 temp_file.puts line
               else
